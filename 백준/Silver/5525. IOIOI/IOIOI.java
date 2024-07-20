@@ -8,19 +8,22 @@ public class Main {
         int n = Integer.parseInt(br.readLine());
         int m = Integer.parseInt(br.readLine());
         String str = br.readLine();
-        String oi = "OI";
-        String ioi = "I";
         int cnt = 0;
-        for(int i = 0; i<n; i++){
-            ioi += oi;
-        }
-        //System.out.println(ioi);
+        int result = 0;
 
-        for(int i = 0; i<=str.length()-ioi.length(); i++){
-            if(str.substring(i, i+ioi.length()).equals(ioi)){
+        for(int i = 1; i<m-1; i++){
+            if(str.charAt(i-1)=='I' && str.charAt(i) == 'O' && str.charAt(i+1) == 'I'){
                 cnt++;
+                if(cnt == n){
+                    cnt--;
+                    result++;
+                }
+                i++;
+            }
+            else{
+                cnt = 0;
             }
         }
-        System.out.println(cnt);
+        System.out.println(result);
     }
 }
