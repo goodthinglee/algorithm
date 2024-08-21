@@ -34,12 +34,11 @@ public class Main {
 
         while(!queue.isEmpty()) {
             int now = queue.poll();
-            for(int i = 1; i < n+1; i++) {  // 1번 컴퓨터부터 n번 컴퓨터까지 연결 여부 확인
+            for(int i = 1; i <= n; i++) {  // 1번 컴퓨터부터 n번 컴퓨터까지 연결 여부 확인
                 if(map[now][i] == 1 && !visited[i]) {  // 연결된 컴퓨터이고, 방문하지 않은 경우
-                    queue.add(i);
                     visited[i] = true;
                     result++;
-
+                    queue.add(i);
                 }
             }
         }
