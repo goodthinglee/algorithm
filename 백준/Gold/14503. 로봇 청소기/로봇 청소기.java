@@ -6,8 +6,8 @@ public class Main {
     static int r, c, d;
     static int[][] map;
     static int cnt;
-    static int[] dx = { -1, 0, 1, 0 }; // 북, 동, 남, 서 (순서대로)
-    static int[] dy = { 0, 1, 0, -1 };
+    static int[] dx = {0, 1, 0, -1}; // 북, 동, 남, 서 (순서대로)
+    static int[] dy = {1, 0, -1, 0};
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -34,78 +34,76 @@ public class Main {
     }
 
     public static void clean(int x, int y, int dir) {
+        boolean check = false;
         if (map[x][y] == 0) {
-            map[x][y] = 5; // 청소된 칸 표시
+            map[x][y] = 5; // 청소 완료
             cnt++;
         }
 
-        boolean check = false;
+        // 여기서 true가 되면 청소되지 않은 빈칸이 있다는 것
         for (int i = 0; i < 4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
             if (nx >= 0 && ny >= 0 && nx < n && ny < m && map[nx][ny] == 0) {
                 check = true;
-                break; // 청소되지 않은 빈칸이 하나라도 있으면 체크하고 빠져나감
+                break;
             }
         }
 
+        // 주변 4칸 중 청소되지 않은 빈칸이 있는 경우
         if (check) {
-            switch (dir) {
-                case 0: // 북쪽
-                    dir = 3; // 왼쪽 방향으로 회전 (서쪽)
-                    if (y - 1 >= 0 && map[x][y - 1] == 0) {
-                        clean(x, y - 1, dir); // 서쪽으로 이동
-                    } else {
-                        clean(x, y, dir); // 현재 방향으로 재탐색
-                    }
-                    break;
-                case 1: // 동쪽
-                    dir = 0; // 왼쪽 방향으로 회전 (북쪽)
-                    if (x - 1 >= 0 && map[x - 1][y] == 0) {
-                        clean(x - 1, y, dir); // 북쪽으로 이동
-                    } else {
-                        clean(x, y, dir); // 현재 방향으로 재탐색
-                    }
-                    break;
-                case 2: // 남쪽
-                    dir = 1; // 왼쪽 방향으로 회전 (동쪽)
-                    if (y + 1 < m && map[x][y + 1] == 0) {
-                        clean(x, y + 1, dir); // 동쪽으로 이동
-                    } else {
-                        clean(x, y, dir); // 현재 방향으로 재탐색
-                    }
-                    break;
-                case 3: // 서쪽
-                    dir = 2; // 왼쪽 방향으로 회전 (남쪽)
-                    if (x + 1 < n && map[x + 1][y] == 0) {
-                        clean(x + 1, y, dir); // 남쪽으로 이동
-                    } else {
-                        clean(x, y, dir); // 현재 방향으로 재탐색
-                    }
-                    break;
+            if (dir == 0) {
+                dir = 3;
+                if (y - 1 >= 0 && map[x][y - 1] == 0) {
+                    y = y - 1;
+                }
+                clean(x, y, dir);
+            } else if (dir == 1) {
+                dir = 0;
+                if (x - 1 >= 0 && map[x - 1][y] == 0) {
+                    x = x - 1;
+                }
+                clean(x, y, dir);
+            } else if (dir == 2) {
+                dir = 1;
+                if (y + 1 < m && map[x][y + 1] == 0) {
+                    y = y + 1;
+                }
+                clean(x, y, dir);
+            } else if (dir == 3) {
+                dir = 2;
+                if (x + 1 < n && map[x + 1][y] == 0) {
+                    x = x + 1;
+                }
+                clean(x, y, dir);
             }
-        } else { // 청소되지 않은 빈칸이 없는 경우
-            switch (dir) {
-                case 0: // 북쪽을 보고 있는 경우 후진 방향은 남쪽
-                    if (x + 1 < n && map[x + 1][y] != 1) {
-                        clean(x + 1, y, dir); // 후진
-                    }
-                    break;
-                case 1: // 동쪽을 보고 있는 경우 후진 방향은 서쪽
-                    if (y - 1 >= 0 && map[x][y - 1] != 1) {
-                        clean(x, y - 1, dir); // 후진
-                    }
-                    break;
-                case 2: // 남쪽을 보고 있는 경우 후진 방향은 북쪽
-                    if (x - 1 >= 0 && map[x - 1][y] != 1) {
-                        clean(x - 1, y, dir); // 후진
-                    }
-                    break;
-                case 3: // 서쪽을 보고 있는 경우 후진 방향은 동쪽
-                    if (y + 1 < m && map[x][y + 1] != 1) {
-                        clean(x, y + 1, dir); // 후진
-                    }
-                    break;
+        } 
+        // 주변 4칸 중 청소되지 않은 빈칸이 없는 경우
+        else {
+            if (dir == 0) {
+                // 북쪽을 보고 있는 경우
+                if (x + 1 < n && map[x + 1][y] != 1) {
+                    x = x + 1;
+                    clean(x, y, dir);
+                }
+            } else if (dir == 1) {
+                // 동쪽을 보고 있는 경우
+                if (y - 1 >= 0 && map[x][y - 1] != 1) {
+                    y = y - 1;
+                    clean(x, y, dir);
+                }
+            } else if (dir == 2) {
+                // 남쪽을 보고 있는 경우
+                if (x - 1 >= 0 && map[x - 1][y] != 1) {
+                    x = x - 1;
+                    clean(x, y, dir);
+                }
+            } else if (dir == 3) {
+                // 서쪽을 보고 있는 경우
+                if (y + 1 < m && map[x][y + 1] != 1) {
+                    y = y + 1;
+                    clean(x, y, dir);
+                }
             }
         }
     }
