@@ -31,33 +31,14 @@ public class Main {
         map[tx][ty] = 0;
         bfs(tx,ty);
 
-        for(int i = 0; i<n; i++){
-            for(int j = 0; j<m; j++){
-                if(map[i][j] == 1){
-                    boolean possible = true;
-                    boolean possible2 = true;
-                    for(int d = 0; d<4; d++){
-                        int nx = i+dx[d];
-                        int ny = j+dy[d];
-
-                        //사방에 시작좌표가 있다
-                        if(nx == tx && ny == ty){
-                            possible2 = false;
-                        }
-                        if(nx<0 || nx>=n || ny<0 || ny>=m)
-                            continue;
-                        //사방에 0이 아닌게 하나라도있으면
-                        if(map[nx][ny] > 1) {
-                            possible = false;
-                        }
-                    }
-                    //사방에 시작좌표가없고 사방이 0이면
-                    if(possible2 == true && possible == true){
-                        map[i][j] = -1;
-                    }
+        for(int i = 0; i<n; i++) {
+            for (int j = 0; j < m; j++) {
+                if(map[i][j] == 1 && !visited[i][j]){
+                    map[i][j] = -1;
                 }
             }
         }
+
         for(int i = 0; i<n; i++){
             for(int j = 0; j<m; j++){
                 System.out.print(map[i][j] + " ");
